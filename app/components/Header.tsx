@@ -7,56 +7,37 @@ import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope, faPhone, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import localFont from 'next/font/local'
 import logoSrc from './logo'
+import { usePathname } from 'next/navigation'
 
 const ethnocentric = localFont({ src: '../fonts/ethnocentric-rg.woff' })
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
-        const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-            e.preventDefault();
-            const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
-            if (href?.startsWith('#')) {
-                const targetId = href.substring(1);
-                const elem = document.getElementById(targetId);
-                if (elem) {
-                    const headerHeight = document.querySelector('header')?.offsetHeight || 0;
-                    const elementPosition = elem.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 1; // Increased padding
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            }
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
         };
 
-        const links = document.querySelectorAll('a[href^="#"]');
-        links.forEach(link => {
-            link.addEventListener('click', handleScroll as unknown as EventListener);
-        });
-
-        return () => {
-            links.forEach(link => {
-                link.removeEventListener('click', handleScroll as unknown as EventListener);
-            });
-        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <header className="bg-black text-white shadow-md fixed top-0 left-0 right-0 z-50">
-            <div className="container mx-auto px-4 py-3"> {/* Reduced padding */}
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black shadow-md' : ''}`}>
+            <div className="container mx-auto px-4 py-3">
                 <div className="flex justify-between items-center">
                     {/* Logo and title */}
-                    <div className="flex items-center w-1/4"> {/* Added w-1/4 */}
+                    <div className="flex items-center w-1/4">
                         <Image
                             src={logoSrc}
                             alt="Spartan Future Logo"
-                            width={50}  // Reduced size
-                            height={50} // Reduced size
-                            className="w-12 h-12 md:w-14 md:h-14" // Adjusted sizes
+                            width={50}
+                            height={50}
+                            className="w-12 h-12 md:w-14 md:h-14"
+                            priority
                         />
                         <div className={`text-xl md:text-2xl font-bold leading-none ml-2 ${ethnocentric.className}`}>
                             <Link href="/" className="hover:text-gray-300 transition duration-300">
@@ -67,8 +48,8 @@ export default function Header() {
                     </div>
 
                     {/* Navigation */}
-                    <nav className="hidden md:flex justify-center flex-grow"> {/* Added flex-grow */}
-                        <ul className="flex justify-center space-x-6"> {/* Reduced spacing */}
+                    <nav className="hidden md:flex justify-center flex-grow">
+                        <ul className="flex justify-center space-x-6">
                             {[
                                 { name: 'Electric Future', href: '/#electric-future' },
                                 { name: 'Services', href: '/#services' },
@@ -77,10 +58,10 @@ export default function Header() {
                                 <li key={item.name}>
                                     <Link 
                                         href={item.href}
-                                        className="hover:text-blue-400 transition duration-300 text-base font-semibold relative group" // Reduced font size
+                                        className={`hover:text-blue-400 transition duration-300 text-base font-semibold relative group ${pathname === item.href ? 'text-blue-400' : 'text-white'}`}
                                     >
                                         {item.name}
-                                        <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                                        <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-blue-400 transform ${pathname === item.href ? 'scale-x-100' : 'scale-x-0'} group-hover:scale-x-100 transition-transform duration-300`}></span>
                                     </Link>
                                 </li>
                             ))}
@@ -88,26 +69,29 @@ export default function Header() {
                     </nav>
 
                     {/* Social icons and mobile menu button */}
-                    <div className="flex items-center w-1/4 justify-end"> {/* Added w-1/4 and justify-end */}
-                        <div className="hidden md:flex space-x-4"> {/* Reduced spacing */}
+                    <div className="flex items-center w-1/4 justify-end">
+                        <div className="hidden md:flex space-x-4">
                             {[ 
-                                { icon: faFacebookF, href: "#" },
-                                { icon: faInstagram, href: "#" },
-                                { icon: faEnvelope, href: "mailto:contact@example.com" },
-                                { icon: faPhone, href: "tel:+1234567890" }
+                                { icon: faFacebookF, href: "https://www.facebook.com/spartanfutureofficial", label: "Facebook" },
+                                { icon: faInstagram, href: "https://www.instagram.com/spartanfutureofficial", label: "Instagram" },
+                                { icon: faEnvelope, href: "mailto:support@spartanfuture.com", label: "Email" },
+                                { icon: faPhone, href: "tel:+1234567890", label: "Phone" }
                             ].map((item, index) => (
                                 <a 
                                     key={index} 
                                     href={item.href} 
                                     className="text-white hover:text-blue-400 transition duration-300 transform hover:scale-110"
+                                    aria-label={item.label}
                                 >
-                                    <FontAwesomeIcon icon={item.icon} size="sm" /> {/* Reduced icon size */}
+                                    <FontAwesomeIcon icon={item.icon} size="sm" />
                                 </a>
                             ))}
                         </div>
                         <button 
                             className="md:hidden z-50 text-white hover:text-blue-400 transition duration-300 ml-4"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={isMenuOpen}
                         >
                             <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} size="lg" />
                         </button>
@@ -139,9 +123,9 @@ export default function Header() {
                     </nav>
                     <div className="flex space-x-10">
                         {[ 
-                            { icon: faFacebookF, href: "#" },
-                            { icon: faInstagram, href: "#" },
-                            { icon: faEnvelope, href: "mailto:contact@example.com" },
+                            { icon: faFacebookF, href: "https://www.facebook.com/spartanfutureofficial" },
+                            { icon: faInstagram, href: "https://www.instagram.com/spartanfutureofficial" },
+                            { icon: faEnvelope, href: "mailto:support@spartanfuture.com" },
                             { icon: faPhone, href: "tel:+1234567890" }
                         ].map((item, index) => (
                             <a 

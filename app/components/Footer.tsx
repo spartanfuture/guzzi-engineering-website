@@ -49,11 +49,10 @@ export default function Footer() {
           {/* Social Icons */}
           <div className="flex space-x-4 w-full md:w-1/4 justify-center md:justify-end">
             {[
-              { icon: faFacebookF, href: "#" },
-              { icon: faInstagram, href: "#" },
-              { icon: faLinkedinIn, href: "#" },
-              { icon: faEnvelope, href: "mailto:support@spartanfuture.com" },
-              { icon: faPhone, href: "tel:+1234567890" }
+               { icon: faFacebookF, href: "https://www.facebook.com/spartanfutureofficial" },
+               { icon: faInstagram, href: "https://www.instagram.com/spartanfutureofficial" },
+               { icon: faEnvelope, href: "mailto:support@spartanfuture.com" },
+               { icon: faPhone, href: "tel:+1234567890" }
             ].map((item, index) => (
               <a 
                 key={index} 
