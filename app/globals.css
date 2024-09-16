@@ -46,3 +46,8 @@ body {
   padding-top: 120px; /* Increased padding-top */
   margin-top: -60px; /* This negative margin offsets part of the padding */
 }
+
+.slick-prev::before,
+.slick-next::before {
+    display: none;
+}

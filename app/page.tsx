@@ -22,7 +22,7 @@ export default function Home() {
       <div className="container mx-auto px-8 py-10 bg-black bg-opacity-70">
         {/* First Row */}
         <section id="electric-future" className="mb-20 pt-24 px-8">
-          <h2 className={`text-4xl mb-12 text-center text-white ${ethnocentric.className}`}>Electric Future</h2>
+          <h2 className={`text-4xl mb-12 text-center text-white ${ethnocentric.className}`}>Choose your future</h2>
           <div className="grid md:grid-cols-2 gap-12">
             {[
               { title: "Electric ATV's", image: image1, description: "Rugged, efficient Spartan Mini ATVs engineered for Northern Territory conditions. Experience the future of off-road mobility.", href: "/electric-atvs" },

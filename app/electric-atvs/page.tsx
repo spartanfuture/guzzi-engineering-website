@@ -12,6 +12,13 @@ import localFont from 'next/font/local'
 import { FaFeather, FaChild, FaMountain } from 'react-icons/fa';
 import atvImage from '../images/AtvBanner.jpg'
 import { Inter } from 'next/font/google'
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaBolt, FaBatteryFull, FaRoad, FaTachometerAlt, FaClock, FaWeight } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Link from 'next/link';
 
 const ethnocentric = localFont({ src: '../fonts/ethnocentric-rg.woff' })
 const inter = Inter({ subsets: ['latin'] })
@@ -21,11 +28,13 @@ export default function ElectricATVsPage() {
     const [lastScrollY, setLastScrollY] = useState(0);
     const [showFeatures, setShowFeatures] = useState(false);
     const [showSpecs, setShowSpecs] = useState(false);
+    const [activeSection, setActiveSection] = useState<string | null>(null);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     const useCases = [
-        { icon: <FaFeather className="text-4xl mb-4" />, title: "Quiet Hunting", description: "Silent operation for undisturbed wildlife observation and hunting." },
-        { icon: <FaChild className="text-4xl mb-4" />, title: "Family Fun", description: "Safe and easy to operate for unforgettable family outdoor adventures." },
-        { icon: <FaMountain className="text-4xl mb-4" />, title: "Exploring Adventure", description: "Conquer any terrain with powerful electric performance." },
+        { icon: FaFeather, title: "Quiet Hunting", description: "Silent operation for undisturbed wildlife observation and hunting.", color: "text-green-400" },
+        { icon: FaChild, title: "Family Fun", description: "Safe and convenient for all family adventures.", color: "text-blue-400" },
+        { icon: FaMountain, title: "Exploring Adventure", description: "Go further with powerful efficient electric performance.", color: "text-purple-400" },
     ];
 
     const features = [
@@ -38,12 +47,12 @@ export default function ElectricATVsPage() {
     ];
 
     const specifications = [
-        { name: "Motor", value: "3000W Internal Permanent Magnet Motor" },
-        { name: "Battery", value: "72V 53Ah Lithium-ion" },
-        { name: "Range", value: "Up to 100kms" },
-        { name: "Top Speed", value: "49km/h (adjustable)" },
-        { name: "Charging Time", value: "4-6 hours" },
-        { name: "Weight Capacity", value: "120 kgs" },
+        { icon: FaBolt, name: "Motor", value: "3000W Internal Permanent Magnet Motor", color: "text-yellow-400" },
+        { icon: FaBatteryFull, name: "Battery", value: "72V 53Ah Lithium-ion", color: "text-green-500" },
+        { icon: FaRoad, name: "Range", value: "Up to 100kms", color: "text-blue-400" },
+        { icon: FaTachometerAlt, name: "Top Speed", value: "49km/h (Limited)", color: "text-red-500" },
+        { icon: FaClock, name: "Charging Time", value: "4-6 hours", color: "text-purple-500" },
+        { icon: FaWeight, name: "Weight Capacity", value: "120 kgs", color: "text-orange-500" },
     ];
 
     const Divider = () => (
@@ -51,6 +60,38 @@ export default function ElectricATVsPage() {
             <div className="w-full h-px bg-gradient-to-r from-transparent via-red-800 to-transparent"></div>
         </div>
     );
+
+    const usabilityImages = [
+        { src: atvImage2, alt: "ATV at work" },
+        { src: cadModel1, alt: "ATV frame" },
+        { src: cadModel2, alt: "ATV model" },
+        { src: cadModel3, alt: "ATV in action" },
+    ];
+
+    const NextArrow = ({ onClick }: { onClick?: () => void }) => (
+        <button onClick={onClick} className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 bg-opacity-50 p-2 rounded-full">
+            <FaArrowRight className="text-white" />
+        </button>
+    );
+
+    const PrevArrow = ({ onClick }: { onClick?: () => void }) => (
+        <button onClick={onClick} className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 bg-opacity-50 p-2 rounded-full">
+            <FaArrowLeft className="text-white" />
+        </button>
+    );
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
+        beforeChange: (current: number, next: number) => setCurrentSlide(next),
+    };
 
     useEffect(() => {
         const header = document.querySelector('header');
@@ -93,7 +134,7 @@ export default function ElectricATVsPage() {
             <div className="container mx-auto px-4 py-16 space-y-24">
                 {/* Hero Section */}
                 <section className="text-center mt-16">
-                    <h1 className={`${ethnocentric.className} text-6xl mb-16 text-red-800`}>Spartan Mini Electric ATV</h1>
+                    <h1 className={`${ethnocentric.className} text-6xl mb-16 text-red-800`}>Spartan Mini ATV</h1>
                     <div className="relative max-w-4xl mx-auto">
                         <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                             <Image 
@@ -112,100 +153,107 @@ export default function ElectricATVsPage() {
 
                 <Divider />
 
-                {/* Use Cases Section */}
-                <section className="max-w-5xl mx-auto">
-                    <h2 className={`${ethnocentric.className} text-4xl font-bold mb-12 text-center text-gray-300 tracking-wide`}>Experience the Versatility</h2>
-                    <div className="grid md:grid-cols-3 gap-8">
+                {/* Updated Versatility Section with Colorful Icons */}
+                <section className="max-w-6xl mx-auto px-4 ">
+                    <h2 className={`${ethnocentric.className} text-4xl font-bold mb-16 text-center text-gray-400 tracking-wide`}>
+                        Experience the Versatility
+                    </h2>
+                    <div className="grid md:grid-cols-3 gap-8 mb-16">
                         {useCases.map((useCase, index) => (
-                            <div key={index} className="bg-gradient-to-b from-gray-900 to-gray-800 p-8 rounded-xl shadow-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                                <div className="bg-gray-700 rounded-full p-4 inline-block mb-6">
-                                    {React.cloneElement(useCase.icon, { className: "text-5xl text-gray-300" })}
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.2 }}
+                                className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-lg"
+                            >
+                                <div className="p-8">
+                                    <div className={`flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-gray-800 ${useCase.color}`}>
+                                        <useCase.icon className="text-3xl" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-4 text-gray-200">{useCase.title}</h3>
+                                    <p className="text-gray-400 text-lg leading-relaxed">{useCase.description}</p>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4 text-gray-200">{useCase.title}</h3>
-                                <p className="text-gray-400 text-lg">{useCase.description}</p>
-                            </div>
+                                <div className={`h-1 bg-gradient-to-r from-gray-800 via-${useCase.color.replace('text-', '')} to-gray-800`}></div>
+                            </motion.div>
                         ))}
+                    </div>
+                    
+                    {/* Updated Slideshow Section */}
+                    <div className="max-w-3xl mx-auto">
+                        <div className="relative">
+                            <Slider {...settings}>
+                                {usabilityImages.map((image, index) => (
+                                    <div key={index} className="relative h-64 md:h-80">
+                                        <Image
+                                            src={image.src}
+                                            alt={image.alt}
+                                            fill
+                                            className="object-cover rounded-lg"
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
                     </div>
                 </section>
 
                 <Divider />
 
-                {/* Features and Specifications Section */}
-                <div className="max-w-5xl mx-auto">
-                    <div className="flex justify-center gap-16 mb-16">
-                        {/* Features Tab */}
-                        <button 
-                            className={`relative px-6 py-4 text-3xl font-bold transition-all duration-300 ${showFeatures ? 'text-red-800' : 'text-gray-400 hover:text-gray-300'}`}
-                            onClick={() => {setShowFeatures(!showFeatures); setShowSpecs(false);}}
-                        >
-                            <span className="flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                                </svg>
-                                Features
-                            </span>
-                            {showFeatures && (
-                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-red-800 to-transparent"></div>
-                            )}
-                        </button>
-
-                        {/* Specifications Tab */}
-                        <button 
-                            className={`relative px-6 py-4 text-3xl font-bold transition-all duration-300 ${showSpecs ? 'text-red-800' : 'text-gray-400 hover:text-gray-300'}`}
-                            onClick={() => {setShowSpecs(!showSpecs); setShowFeatures(false);}}
-                        >
-                            <span className="flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2m0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                                Specifications
-                            </span>
-                            {showSpecs && (
-                                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-red-800 to-transparent"></div>
-                            )}
-                        </button>
-                    </div>
-
-                    {/* Content Area */}
-                    <div className={`bg-gradient-to-b from-gray-900 to-gray-800 p-8 rounded-2xl shadow-2xl transition-all duration-500 ${(showFeatures || showSpecs) ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'}`}>
-                        {showFeatures && (
-                            <ul className="grid md:grid-cols-2 gap-6">
-                                {features.map((feature, index) => (
-                                    <li key={index} className="flex items-start bg-gray-800 p-4 rounded-lg shadow-md">
-                                        <span className="text-green-600 mr-3 text-3xl">•</span>
-                                        <span className="text-gray-300 text-lg">{feature}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                        {showSpecs && (
-                            <div className="grid md:grid-cols-2 gap-6">
-                                {specifications.map((spec, index) => (
-                                    <div key={index} className="bg-gray-800 p-4 rounded-lg shadow-md">
-                                        <h3 className=" text-green-600 mb-2 text-xl">{spec.name}</h3>
-                                        <p className="text-gray-300 text-lg">{spec.value}</p>
+                {/* Updated Features & Specifications Section */}
+                <section className="py-20 bg-gradient-to-b from-black to-black">
+                    <div className="container mx-auto px-4">
+                        <h2 className={`${ethnocentric.className} text-4xl mb-12 text-center text-gray-400`}>
+                            Features & Specifications
+                        </h2>
+                        <div className="grid grid-cols-3 gap-8">
+                            {specifications.map((spec, index) => (
+                                <div
+                                    key={spec.name}
+                                    className="bg-gray-800 rounded-lg p-6 flex flex-col items-center justify-between h-full shadow-lg transition-all duration-300"
+                                >
+                                    <div className="text-center mb-4 flex flex-col items-center justify-center flex-grow">
+                                        <spec.icon className={`text-5xl mb-4 ${spec.color}`} />
+                                        <h3 className="text-2xl font-bold mb-2 text-gray-200">{spec.name}</h3>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                    <p className="text-base text-center text-gray-300">
+                                        {spec.value}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </section>
 
                 <Divider />
 
                 {/* Call to Action */}
                 <section className="text-center">
-                    <a 
+                    <Link 
                         href="/register-interest"
                         className="inline-block bg-red-800 hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full text-xl transition duration-300 transform hover:scale-105 hover:shadow-lg"
                     >
                         Register Your Interest
-                    </a>
+                    </Link>
                 </section>
             </div>
             <style jsx global>{`
                 .electric-atv-page header {
                     transition: transform 0.3s ease-in-out !important;
+                }
+                .slick-slider {
+                    margin-bottom: 0;
+                }
+                .slick-dots {
+                    bottom: 16px;
+                }
+                .slick-dots li button:before {
+                    color: white;
+                    opacity: 0.5;
+                }
+                .slick-dots li.slick-active button:before {
+                    color: white;
+                    opacity: 1;
                 }
             `}</style>
         </main>
