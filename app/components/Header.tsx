@@ -25,6 +25,13 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const navItems = [
+        { name: 'Electric Future', href: '/#electric-future' },
+        { name: 'Spartan Parks', href: 'https://spartanparks.com.au/', external: true },
+        { name: 'Services', href: '/#services' },
+        { name: 'Contact', href: '/#contact' }
+    ];
+
     return (
         <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black shadow-md' : ''}`}>
             <div className="container mx-auto px-4 py-3">
@@ -50,19 +57,27 @@ export default function Header() {
                     {/* Navigation */}
                     <nav className="hidden md:flex justify-center flex-grow">
                         <ul className="flex justify-center space-x-6">
-                            {[
-                                { name: 'Electric Future', href: '/#electric-future' },
-                                { name: 'Services', href: '/#services' },
-                                { name: 'Contact', href: '/#contact' }
-                            ].map((item) => (
+                            {navItems.map((item) => (
                                 <li key={item.name}>
-                                    <Link 
-                                        href={item.href}
-                                        className={`hover:text-blue-400 transition duration-300 text-base font-semibold relative group ${pathname === item.href ? 'text-blue-400' : 'text-white'}`}
-                                    >
-                                        {item.name}
-                                        <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-blue-400 transform ${pathname === item.href ? 'scale-x-100' : 'scale-x-0'} group-hover:scale-x-100 transition-transform duration-300`}></span>
-                                    </Link>
+                                    {item.external ? (
+                                        <a 
+                                            href={item.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`hover:text-blue-400 transition duration-300 text-base font-semibold relative group ${pathname === item.href ? 'text-blue-400' : 'text-white'}`}
+                                        >
+                                            {item.name}
+                                            <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></span>
+                                        </a>
+                                    ) : (
+                                        <Link 
+                                            href={item.href}
+                                            className={`hover:text-blue-400 transition duration-300 text-base font-semibold relative group ${pathname === item.href ? 'text-blue-400' : 'text-white'}`}
+                                        >
+                                            {item.name}
+                                            <span className={`absolute left-0 right-0 bottom-0 h-0.5 bg-blue-400 transform ${pathname === item.href ? 'scale-x-100' : 'scale-x-0'} group-hover:scale-x-100 transition-transform duration-300`}></span>
+                                        </Link>
+                                    )}
                                 </li>
                             ))}
                         </ul>

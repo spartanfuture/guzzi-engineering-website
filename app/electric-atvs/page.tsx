@@ -6,7 +6,7 @@ import atvImage2 from '../images/atvWork.jpg'
 import cadModel1 from '../images/frame.jpg'
 import cadModel2 from '../images/atv.jpg'
 import cadModel3 from '../images/atvWork.jpg'
-import KeyFeatures from '../components/keyFeatures';
+
 import Image from 'next/image';
 import localFont from 'next/font/local'
 import { FaFeather, FaChild, FaMountain } from 'react-icons/fa';
@@ -151,8 +151,37 @@ export default function ElectricATVsPage() {
                     </div>
                 </section>
 
+               
+
                 <Divider />
 
+                {/* Updated Features & Specifications Section */}
+                <section className="bg-gradient-to-b from-black to-black">
+                    <div className="container mx-auto px-4">
+                        <h2 className={`${ethnocentric.className} text-4xl mb-12 text-center text-gray-400`}>
+                            Features & Specifications
+                        </h2>
+                        <div className="grid grid-cols-3 gap-8">
+                            {specifications.map((spec, index) => (
+                                <div
+                                    key={spec.name}
+                                    className="bg-gray-800 rounded-lg p-6 flex flex-col items-center justify-between h-full shadow-lg transition-all duration-300"
+                                >
+                                    <div className="text-center mb-4 flex flex-col items-center justify-center flex-grow">
+                                        <spec.icon className={`text-5xl mb-4 ${spec.color}`} />
+                                        <h3 className="text-2xl font-bold mb-2 text-gray-200">{spec.name}</h3>
+                                    </div>
+                                    <p className="text-base text-center text-gray-300">
+                                        {spec.value}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+                <Divider />
+
+                
                 {/* Updated Versatility Section with Colorful Icons */}
                 <section className="max-w-6xl mx-auto px-4 ">
                     <h2 className={`${ethnocentric.className} text-4xl font-bold mb-16 text-center text-gray-400 tracking-wide`}>
@@ -194,33 +223,6 @@ export default function ElectricATVsPage() {
                                     </div>
                                 ))}
                             </Slider>
-                        </div>
-                    </div>
-                </section>
-
-                <Divider />
-
-                {/* Updated Features & Specifications Section */}
-                <section className="py-20 bg-gradient-to-b from-black to-black">
-                    <div className="container mx-auto px-4">
-                        <h2 className={`${ethnocentric.className} text-4xl mb-12 text-center text-gray-400`}>
-                            Features & Specifications
-                        </h2>
-                        <div className="grid grid-cols-3 gap-8">
-                            {specifications.map((spec, index) => (
-                                <div
-                                    key={spec.name}
-                                    className="bg-gray-800 rounded-lg p-6 flex flex-col items-center justify-between h-full shadow-lg transition-all duration-300"
-                                >
-                                    <div className="text-center mb-4 flex flex-col items-center justify-center flex-grow">
-                                        <spec.icon className={`text-5xl mb-4 ${spec.color}`} />
-                                        <h3 className="text-2xl font-bold mb-2 text-gray-200">{spec.name}</h3>
-                                    </div>
-                                    <p className="text-base text-center text-gray-300">
-                                        {spec.value}
-                                    </p>
-                                </div>
-                            ))}
                         </div>
                     </div>
                 </section>
