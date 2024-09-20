@@ -161,7 +161,7 @@ export default function ElectricATVsPage() {
                         <h2 className={`${ethnocentric.className} text-4xl mb-12 text-center text-gray-400`}>
                             Features & Specifications
                         </h2>
-                        <div className="grid grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {specifications.map((spec, index) => (
                                 <div
                                     key={spec.name}
@@ -169,9 +169,9 @@ export default function ElectricATVsPage() {
                                 >
                                     <div className="text-center mb-4 flex flex-col items-center justify-center flex-grow">
                                         <spec.icon className={`text-5xl mb-4 ${spec.color}`} />
-                                        <h3 className="text-2xl font-bold mb-2 text-gray-200">{spec.name}</h3>
+                                        <h3 className="text-xl sm:text-2xl font-bold mb-2 text-gray-200">{spec.name}</h3>
                                     </div>
-                                    <p className="text-base text-center text-gray-300">
+                                    <p className="text-sm sm:text-base text-center text-gray-300">
                                         {spec.value}
                                     </p>
                                 </div>
